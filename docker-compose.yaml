@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ollama-service:
+    build:
+      context: .
+      dockerfile: Dockerfile_ollama
+      args:
+        TARGETARCH: amd64  # Set the architecture accordingly
+    networks:
+      - custom-network
+
+  litellm-service:
+    build:
+      context: .
+      dockerfile: Dockerfile_litellm
+      args:
+        LITELLM_BUILD_IMAGE: python:3.9
+        LITELLM_RUNTIME_IMAGE: python:3.9-slim
+    networks:
+      - custom-network
+    environment:
+      - LITELLM_HOST_IP=192.168.1.114  # Set the desired IP address for litellm-service
+
+networks:
+  custom-network:
+    driver: bridge
